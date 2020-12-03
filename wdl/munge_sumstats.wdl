@@ -17,17 +17,23 @@ task clean_filter {
         echo "${sumstat_file}"
         echo ""
 
-        echo "`date` original number of variants"
-        gunzip -c ${sumstat_file} | tail -n+2 | wc -l
+        catcmd="cat"
+        if [[ ${sumstat_file} == *.gz ]] || [[ ${sumstat_file} == *.bgz ]]
+        then
+            catcmd="zcat"
+        fi
 
-        chr_col=$(gunzip -c ${sumstat_file} | head -1 | tr '\t ' '\n' | grep -nx "CHR" | head -1 | cut -d ':' -f1)
-        pos_col=$(gunzip -c ${sumstat_file} | head -1 | tr '\t ' '\n' | grep -nx "POS" | head -1 | cut -d ':' -f1)
+        echo "`date` original number of variants"
+        $catcmd ${sumstat_file} | tail -n+2 | wc -l
+
+        chr_col=$($catcmd ${sumstat_file} | head -1 | tr '\t ' '\n' | grep -nx "CHR" | head -1 | cut -d ':' -f1)
+        pos_col=$($catcmd ${sumstat_file} | head -1 | tr '\t ' '\n' | grep -nx "POS" | head -1 | cut -d ':' -f1)
         printf "`date` col CHR "${dollar}{chr_col}" col POS "${dollar}{pos_col}"\n"
 
-        gunzip -c ${sumstat_file} | awk ' \
+        $catcmd ${sumstat_file} | awk ' \
           BEGIN{FS="\t| "; OFS="\t"}
           NR==1 {
-              for (i=1;i<=NF;i++) { sub("^CHR", "#CHR", $i); a[$i]=i; if ($i=="POS") pos=i }
+              for (i=1;i<=NF;i++) { sub("^INFO$", "${info_col}", $i); sub("^Rsq$", "${info_col}", $i); sub("^CHR", "#CHR", $i); a[$i]=i; if ($i=="POS") pos=i }
               gsub("Pvalue", "p.value", $0);
               print $0
           } NR>1 {
@@ -78,7 +84,7 @@ task clean_filter {
         memory: "2 GB"
         disks: "local-disk 200 HDD"
         zones: "us-east1-d"
-        preemptible: 0
+        preemptible: 2
         noAddress: true
     }
 }
@@ -144,10 +150,10 @@ task lift {
     runtime {
         docker: "${docker}"
         cpu: "1"
-        memory: "20 GB"
+        memory: "2 GB"
         disks: "local-disk 200 HDD"
         zones: "us-east1-d"
-        preemptible: 0
+        preemptible: 2
         noAddress: true
     }
 }
@@ -189,9 +195,9 @@ task harmonize {
         docker: "${docker}"
         cpu: "1"
         memory: "2 GB"
-        disks: "local-disk 200 SSD"
+        disks: "local-disk 200 HDD"
         zones: "us-east1-d"
-        preemptible: 0
+        preemptible: 2
         noAddress: true
     }
 }
@@ -200,13 +206,18 @@ task plot {
 
     File sumstat_file
     String base = basename(sumstat_file)
+    String prefix = sub(base, "\\.txt.*", "")
     Int loglog_ylim
     String pop
     String docker
 
     command <<<
 
-        mv ${sumstat_file} ${base} && \
+        gunzip -c ${sumstat_file} | awk '
+        BEGIN {FS=OFS="\t"}
+        NR==1 {for(i=1;i<=NF;i++) { a[$i]=i; if ($i=="#CHR" || $i=="POS" || $i=="p.value" || $i~"AF_") b[i]=1}}
+        {sep=""; for(i=1;i<=NF;i++) if (b[i]==1) { printf sep""$i; sep="\t"} printf "\n"}
+        ' | bgzip > ${base} && \
 
         Rscript - <<EOF
         require(ggplot2)
@@ -223,6 +234,7 @@ task plot {
         EOF
 
         qqplot.R --file ${base} --bp_col "POS" --chrcol "#CHR" --pval_col "p.value" --loglog_ylim ${loglog_ylim}
+        [[ ! "${base}" =~ "HOSTAGE" && ! "${base}" =~ "Ancestry" ]] && qq_plot.R --input=${base} --prefix=${prefix} --af=AF_Allele2 --pvalue=p.value || echo "qq_plot.R not run"
     >>>
 
     output {
@@ -232,10 +244,10 @@ task plot {
     runtime {
         docker: "${docker}"
         cpu: "1"
-        memory: 15*ceil(size(sumstat_file, "G")) + " GB"
+        memory: 10*ceil(size(sumstat_file, "G")) + " GB"
         disks: "local-disk 200 HDD"
         zones: "us-east1-d"
-        preemptible: 0
+        preemptible: 2
         noAddress: true
     }
 }
