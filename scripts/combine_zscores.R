@@ -9,11 +9,10 @@ for (p in packs) {
   }
 }
 
-
 option_list = list(
-  make_option(c("-ori", "--original-sstat"), type="character", default=NULL,
+  make_option(c("-s", "--original-sstat"), type="character", default=NULL,
               help="original sumstat", metavar="character"),
-  make_option(c("-imp", "--imputed-sstat"), type="character", default=NULL,
+  make_option(c("-i", "--imputed-sstat"), type="character", default=NULL,
               help="original sumstat", metavar="character"),
   make_option(c("-o", "--out"), type="character",
               help="output file name [default= %default]", metavar="character"),
