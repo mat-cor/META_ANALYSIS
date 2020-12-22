@@ -13,8 +13,9 @@ RUN apt-get update && \
     libz-dev libzstd-dev libbz2-dev liblzma-dev libpcre3-dev libssl-dev libcurl4-openssl-dev \
     libopenblas-dev default-jre unzip libboost-all-dev \
     libpng-dev libcairo2-dev tabix --yes && \
-    apt-get clean && \
-    curl -O https://cloud.r-project.org/src/base/R-3/R-3.6.1.tar.gz && \
+    apt-get clean &&
+
+RUN curl -O https://cloud.r-project.org/src/base/R-3/R-3.6.1.tar.gz && \
     tar xvzf R-3.6.1.tar.gz && \
     cd R-3.6.1 && \
     ./configure --with-x=no --enable-R-shlib=yes --with-blas="-lopenblas" && \
@@ -24,15 +25,9 @@ RUN apt-get update && \
     cd .. && \
     rm -rf R-3.6.1*
 
-
-
-
-
 RUN apt-get update && \
     apt-get install -y git && \
     apt-get install python3-pip --yes
-
-
 
 # need to upgrade pip to install jass deps
 RUN pip3 install --upgrade pip 
