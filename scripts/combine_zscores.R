@@ -10,24 +10,22 @@ for (p in packs) {
 }
 
 option_list = list(
-  make_option(c("-s", "--original-sstat"), type="character", default=NULL,
+  make_option(c("-s", "--original_sstat"), type="character", default=NULL,
               help="original sumstat", metavar="character"),
-  make_option(c("-i", "--imputed-sstat"), type="character", default=NULL,
-              help="original sumstat", metavar="character"),
-  make_option(c("-o", "--out"), type="character",
-              help="output file name [default= %default]", metavar="character"),
+  make_option(c("-i", "--imputed_sstat"), type="character", default=NULL,
+              help="imputed sumstat", metavar="character"),
+  make_option(c("-o", "--out"), type="character", default = NULL,
+              help="output file name ", metavar="character")
 );
 
 opt_parser = OptionParser(option_list=option_list);
 opt = parse_args(opt_parser, positional_arguments=0);
 
-o <- 'Projects/covid19-hgi/test_imputation/FinnGen.Karjalainen.ANA_C2_V2.11.ALL.ALL.FIN.357.238354.SAIGE.20200915.txt.munged.AF.0.001.INFO.0.6.gz.gnomad_v3_b38_ref_fin.gz.gnomad_v2.1.1_b37_ref_nfe.gz'
-o <- opt$options$ori
+o <- opt$options$original_sstat
 print(paste("reading file:", o))
 ori <- fread(o, header=T)
 
-i <- 'Projects/covid19-hgi/test_imputation/FinnGen.Karjalainen.ANA_C2_V2.11.ALL.ALL.FIN.357.238354.SAIGE.20200915.txt.munged.AF.0.001.INFO.0.6.gz.gnomad_v3_b38_ref_fin.gz.imputed.txt.gz'
-i <- opt$options$imp
+i <- opt$options$imputed_sstat
 print(paste("reading file:", i))
 imp <- fread(i, header=T)
 
@@ -50,11 +48,8 @@ imp <- imp %>%
 head(imp)
 
 out <- bind_rows(ori, imp)
-
-is.data.frame(out)
-
 out <- out %>%
   arrange(`#CHR`, POS)
 
-oo <- opt$options$o
+oo <- opt$options$out
 fwrite(out, oo, sep = '\t')
