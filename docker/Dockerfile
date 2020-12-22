@@ -5,6 +5,9 @@ ENV LANG C.UTF-8
 
 ADD META_ANALYSIS /META_ANALYSIS
 
+ENV TZ=Europe/Helsinki
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 RUN apt-get update && \
     apt-get install curl make gcc g++ cmake gfortran libreadline-dev \
     libz-dev libzstd-dev libbz2-dev liblzma-dev libpcre3-dev libssl-dev libcurl4-openssl-dev \
@@ -20,6 +23,10 @@ RUN apt-get update && \
     make install && \
     cd .. && \
     rm -rf R-3.6.1*
+
+
+
+
 
 RUN apt-get update && \
     apt-get install -y git && \
