@@ -421,9 +421,11 @@ class Study:
                 eff = math.log(eff)
 
             chr = chrord[chr]
+            print(self.conf["h_idx"])
+            print(l)
             extracols = [ l[self.conf["h_idx"][c]] for c in self.conf["extra_cols"] ]
 
-            v = VariantData(chr,pos,ref,alt, eff, pval, se, extracols)
+            v = VariantData(chr,pos,ref,alt, eff, pval, extracols)
 
             if self.prev_var is not None and v < self.prev_var:
                 raise Exception("Disorder in study " + self.conf['name'] + " in file " + self.conf['file'] + ". Sort all summary statistic files by chromosome and then position and rerun.\nOffending line: " + "\t".join(l))
@@ -612,7 +614,7 @@ def run():
 
     with open( outfile, 'w' ) as out:
 
-        out.write("\t".join(["#CHR","POS","REF","ALT","SNP", studs[0].name + "_Z", studs[0].name + "_pval" ]))
+        out.write("\t".join(["#CHR","POS","REF","ALT","SNP", studs[0].name + "_Z", studs[0].name + "_pval"]))
 
         out.write( ("\t" if len(studs[0].extra_cols) else "") + "\t".join( [studs[0].name + "_" + c for c in studs[0].extra_cols] ) )
         ## align to leftmost STUDY
@@ -663,7 +665,7 @@ def run():
                         continue
 
                     if next_var[0] is not None:
-                        met = do_meta( [(studs[0],next_var[0]), (studs[i],next_var[i])], methods=methods , is_het_test=False)
+                        met = do_meta( [(studs[0],next_var[0]), (studs[i],next_var[i])], methods=methods, is_het_test=False)
                         for m in met:
                             outdat.append(format_num(m[0]))
                             #outdat.append(format_num(m[1]))
