@@ -35,3 +35,7 @@ RUN pip3 install --upgrade pip
 RUN pip3 install git+https://gitlab.pasteur.fr/statistical-genetics/JASS_Pre-processing
 
 RUN pip3 install git+https://gitlab.pasteur.fr/statistical-genetics/raiss.git
+
+ADD META_ANALYSIS/scripts/install_packs.R /usr/local/bin/
+RUN chmod a+x /usr/local/bin/install_packs.R && \
+    install_qqman.R
