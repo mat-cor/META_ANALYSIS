@@ -39,7 +39,7 @@ ori <- ori %>%
   mutate(Z = BETA/SE,
          rsID = paste0(CHR, ':', POS, ':', Allele1, ':', Allele2),
          raiss.imputed = 0) %>%
-  select(rsID, '#CHR' = CHR, POS, Allele1, Allele2, Z, p.value, raiss.imputed, BETA, SE, AF_gnomad_v2.1.1_b37_ref_nfe, AF_fc, imputationInfo, N)
+  select(rsID, '#CHR' = CHR, POS, Allele1, Allele2, Z, p.value, raiss.imputed, BETA, SE, AF_Allele2, imputationInfo, N)
 
 head(ori)
 
@@ -48,7 +48,7 @@ imp <- imp %>%
   mutate('#CHR' = as.integer(sub(":.*", "", rsID)),
          p.value = 2*pnorm(-abs(Z)),
          raiss.imputed = 1) %>%
-  select(rsID, '#CHR', POS = pos, Allele1 = A0, Allele2 = A1, Z, p.value, Var, ld_score)
+  select(rsID, '#CHR', POS = pos, Allele1 = A0, Allele2 = A1, Z, p.value, raiss.imputed, Var, ld_score)
 
 head(imp)
 
