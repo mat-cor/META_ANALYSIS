@@ -680,7 +680,7 @@ def run():
                     meta_res.extend([format_num(num) for num in m[0:1]])
                     meta_res.extend([format_num(num, 3) for num in m[1:3]])
             else:
-                meta_res.extend( [format_num(matching_studies[0][1].beta), format_num(matching_studies[0][1].pval, 3), 'NA']  * len(methods) )
+                meta_res.extend( [format_num(matching_studies[0][1].z), format_num(matching_studies[0][1].pval, 3), 'NA']  * len(methods) )
 
             outdat.append( str(len(matching_studies)) )
             outdat.extend(meta_res)
