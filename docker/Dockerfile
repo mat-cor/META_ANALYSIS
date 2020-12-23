@@ -38,4 +38,4 @@ RUN pip3 install git+https://gitlab.pasteur.fr/statistical-genetics/raiss.git
 
 ADD META_ANALYSIS/scripts/install_packs.R /usr/local/bin/
 RUN chmod a+x /usr/local/bin/install_packs.R && \
-    install_qqman.R
+    install_packs.R
