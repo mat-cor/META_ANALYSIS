@@ -1,14 +1,18 @@
 #!/usr/bin/env Rscript
 
-packs <- c("optparse","data.table","R.utils","dplyr")
+# packs <- c("optparse","data.table","R.utils","dplyr")
+# for (p in packs) {
+#   if( !require(p, character.only = T)) {
+#     print(p)
+#     install.packages( p,  repos = c(CRAN = "https://cloud.r-project.org") )
+#     require(p, character.only = T)
+#   }
+# }
 
-for (p in packs) {
-  if( !require(p, character.only = T)) {
-    print(p)
-    install.packages( p,  repos = c(CRAN = "https://cloud.r-project.org") )
-    require(p, character.only = T)
-  }
-}
+require(optparse)
+require(data.table)
+require(R.utils)
+require(dplyr)
 
 option_list = list(
   make_option(c("-s", "--original_sstat"), type="character", default=NULL,
