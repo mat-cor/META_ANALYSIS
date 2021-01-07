@@ -32,9 +32,9 @@ RUN apt-get update && \
 # need to upgrade pip to install jass deps
 RUN pip3 install --upgrade pip 
 
-RUN pip3 install git+https://gitlab.pasteur.fr/statistical-genetics/JASS_Pre-processing
+RUN pip3 install -lv git+https://gitlab.pasteur.fr/statistical-genetics/JASS_Pre-processing
 
-RUN pip3 install git+https://gitlab.pasteur.fr/statistical-genetics/raiss.git
+RUN pip3 install -lv git+https://gitlab.pasteur.fr/statistical-genetics/raiss.git
 
 ADD META_ANALYSIS/scripts/install_packs.R /usr/local/bin/
 RUN chmod a+x /usr/local/bin/install_packs.R && \
