@@ -1,0 +1,1 @@
+gs://covid19-hg-cromwell/impute_sumstats/23605593-17af-45ba-8c77-98fa44e8025d/call-raiss_combine/shard-17/sub.raiss_combine/717a3be5-b670-4bc2-8f62-7218d051f3a4/call-raiss/shard-14/glob-f4ac7713b8ac98e62664b0707334df14/z_COVID_UKBB_ANA_B2_V2.ALL.ALL.SAS_chr15.txt

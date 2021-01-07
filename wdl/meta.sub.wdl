@@ -22,7 +22,7 @@ task run_range {
         echo "n studies: ${n_studies}"
         printf "${sep='\n' summary_stats}\n"
 
-        /META_ANALYSIS/scripts/meta_analysis.py ${opts} --chrom ${chrom} ${conf} "${pheno}_${method}_chr${chrom}_meta" ${method} && \
+        /META_ANALYSIS/scripts/meta_analysis_z_scores.py ${opts} --chrom ${chrom} ${conf} "${pheno}_${method}_chr${chrom}_meta" ${method} && \
         echo "`date` done"
 
     >>>
@@ -35,7 +35,7 @@ task run_range {
         docker: "${docker}"
         cpu: "1"
         memory: "2 GB"
-        disks: "local-disk 200 HDD"
+        disks: "local-disk 500 HDD"
         zones: "us-east1-d"
         preemptible: 0
         noAddress: true
@@ -99,7 +99,7 @@ task gather {
         docker: "${docker}"
         cpu: "1"
         memory: "20 GB"
-        disks: "local-disk 200 SSD"
+        disks: "local-disk 500 SSD"
         zones: "us-east1-d"
         preemptible: 0
         noAddress: true
@@ -275,7 +275,7 @@ task lift {
 
     command <<<
 
-        echo "`date` COVID-19 HGI meta-analysis - liftover to 37"
+        echo "`date` COVID-19 HGI meta-analysis - liftover to 38"
         echo "docker: ${docker}"
         echo "file: ${file}"
         echo "method: ${method}"
@@ -289,7 +289,7 @@ task lift {
 
         echo "`date` liftover"
         time /META_ANALYSIS/scripts/lift.py -chr "#CHR" -pos POS -ref REF -alt ALT \
-        -chain_file /liftover/hg38ToHg19.over.chain.gz -tmp_path /cromwell_root/ \
+        -chain_file /liftover/hg19ToHg38.over.chain.gz -tmp_path /cromwell_root/ \
         ${base}.gz > ${base}.lift.out 2> ${base}.lift.err
 
         gunzip -c ${base}.gz.lifted.gz | \
@@ -303,27 +303,28 @@ task lift {
                 $a["SNP"] = $a["#CHR"]":"$a["POS"]":"$a["REF"]":"$a["ALT"]
                 print $0
             }
-        }' | bgzip > ${base}.b37.txt.gz
+        }' | bgzip > ${base}.b38.txt.gz
 
         echo "`date` tabixing"
-        tabix -s1 -b2 -e2 ${base}.b37.txt.gz
+        tabix -s1 -b2 -e2 ${base}.b38.txt.gz
 
         echo "`date` filtering p-value ${p_thresh}"
-        gunzip -c ${base}.b37.txt.gz | awk '
+        gunzip -c ${base}.b38.txt.gz | awk '
         NR==1 {for (i=1;i<=NF;i++) a[$i]=i; print $0}
         NR>1 && $a["all_${method}_meta_p"] < ${p_thresh}
-        ' > ${base}.b37_${p_thresh}.txt
+        ' > ${base}.b38_${p_thresh}.txt
 
         echo "`date` done"
 
     >>>
+    
 
     output {
         File lift_out = base + ".lift.out"
         File lift_err = base + ".lift.err"
-        File out = base + ".b37.txt.gz"
-        File out_tbi = base + ".b37.txt.gz.tbi"
-        File sign = base + ".b37_" + p_thresh + ".txt"
+        File out = base + ".b38.txt.gz"
+        File out_tbi = base + ".b38.txt.gz.tbi"
+        File sign = base + ".b38_" + p_thresh + ".txt"
     }
 
     runtime {
@@ -356,15 +357,17 @@ workflow run_meta {
         input: pheno=pheno, method=method, opts=opts, conf=conf, summary_stats=summary_stats, meta_stats=run_range.out, min_n_studies=min_n_studies
     }
 
-    call add_rsids_af {
+    call lift {
         input: file=gather.out, method=method
+    }
+
+    call add_rsids_af {
+        input: file=lift.out, method=method
     }
 
     call filter_cols {
         input: pheno=pheno, file=add_rsids_af.out, method=method
     }
 
-    call lift {
-        input: file=filter_cols.out, method=method
-    }
+    
 }

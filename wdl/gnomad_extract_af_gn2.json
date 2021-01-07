@@ -1,0 +1,3 @@
+{
+    "gnomad_extract_af.vcf_files": "gs://covid19-hg-analysis/gnomad/v2_b37/genomes_3.0_gnomad.2.1.1.vcf.37.txt"
+}

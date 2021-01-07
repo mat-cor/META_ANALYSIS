@@ -1,0 +1,35 @@
+{
+    "impute_sumstats.sumstats_loc": "gs://covid19-hg-imputation-sumstats/sumstats_loc_B2_ALL.txt",    
+    
+    "impute_sumstats.chrom_list": ["chr1", "chr2", "chr3", "chr4", "chr5", "chr6", "chr7", "chr8", "chr9", "chr10", "chr11","chr12","chr13","chr14","chr15","chr16","chr17","chr18","chr19","chr20","chr21","chr22"],
+    # "impute_sumstats.chrom_list": ["chr21", "chr22"],
+
+    "impute_sumstats.gnomad_ref_template": "gs://covid19-hg-analysis/gnomad/v2_b37/filter/gnomad_v2.1.1_b37_ref_POP.gz",
+    
+    "impute_sumstats.lift.docker": "gcr.io/covid-19-hg/meta:1d50c",
+    "impute_sumstats.lift.b37_ref": "gs://covid19-hg-analysis/recomb_map/37/plink.chr21.GRCh37.map.txt",
+    "impute_sumstats.lift.b38_ref": "gs://covid19-hg-analysis/recomb_map/38/plink.chr21.GRCh38.map.txt",
+
+    "impute_sumstats.harmonize.options": "",
+    "impute_sumstats.harmonize.docker": "gcr.io/covid-19-hg/meta:1d50c",
+
+    "impute_sumstats.jass_preproc.ref_panel_pop": "gs://covid19-hg-imputation-sumstats/ref_panel/POP/annotation_complete.bim",
+    "impute_sumstats.jass_preproc.minMAF": 0.01,
+    "impute_sumstats.jass_preproc.minAF": 0.01,
+    "impute_sumstats.jass_preproc.maxAF": 0.99,
+    "impute_sumstats.jass_preproc.docker": "gcr.io/covid-19-hg/sumstats-imp:0.3.1",
+
+    "impute_sumstats.raiss_combine.raiss.eigen_threshold": 0.000001,
+    "impute_sumstats.raiss_combine.raiss.r2_threshold": 0.8,
+    "impute_sumstats.raiss_combine.raiss.ref_panel_chr_pop": "gs://covid19-hg-imputation-sumstats/ref_panel/POP/CHROM.bim",
+    "impute_sumstats.raiss_combine.raiss.ref_panel_path_pop": "covid19-hg-imputation-sumstats/ref_panel/POP/",
+    "impute_sumstats.raiss_combine.raiss.ld_slices_chr_pop": "gs://covid19-hg-imputation-sumstats/ld/LD_scipy_sparse/POP/ld_slices_CHROM.txt",
+    "impute_sumstats.raiss_combine.raiss.ld_slices_path_pop": "covid19-hg-imputation-sumstats/ld/LD_scipy_sparse/POP/",
+    "impute_sumstats.raiss_combine.raiss.docker": "gcr.io/covid-19-hg/sumstats-imp:0.3.1", 
+
+    "impute_sumstats.raiss_combine.combine.docker": "gcr.io/covid-19-hg/sumstats-imp:0.2.1",
+    
+    "impute_sumstats.raiss_combine.plot.docker": "gcr.io/covid-19-hg/plots-raiss:0.1",
+    "impute_sumstats.raiss_combine.plot.loglog_ylim": 30
+
+}
