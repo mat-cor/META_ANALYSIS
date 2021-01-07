@@ -153,7 +153,7 @@ def z_meta( studies : List[Tuple['Study','VariantData']], is_het_test = False):
     else:
         het_p = None
 
-    return (z_meta, max(sys.float_info.min * sys.float_info.epsilon, 2 * scipy.stats.norm.sf(abs(z_meta))), het_p)
+    return (z_meta, max(sys.float_info.min * sys.float_info.epsilon, 2 * scipy.stats.norm.sf(abs(z_meta))))
 
 
 SUPPORTED_METHODS = {"n":n_meta,"inv_var":inv_var_meta,"variance":variance_weight_meta,"z":z_meta}
@@ -421,8 +421,6 @@ class Study:
                 eff = math.log(eff)
 
             chr = chrord[chr]
-            print(self.conf["h_idx"])
-            print(l)
             extracols = [ l[self.conf["h_idx"][c]] for c in self.conf["extra_cols"] ]
 
             v = VariantData(chr,pos,ref,alt, eff, pval, extracols)
