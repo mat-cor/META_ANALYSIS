@@ -110,7 +110,7 @@ for(maf_b in present_maf){
   print(ct)
 
   Cor_tab[maf_b, "cor"] = signif(ct$estimate, 2)
-  Cor_tab[maf_b, "p"] = signif(ct$p, 5)
+  Cor_tab[maf_b, "p"] = ct$p.value
 }
 
 
