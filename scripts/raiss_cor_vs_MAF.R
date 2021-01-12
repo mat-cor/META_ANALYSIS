@@ -1,3 +1,5 @@
+#!/usr/bin/env Rscript
+
 require(optparse)
 require(data.table)
 require(R.utils)
@@ -22,6 +24,7 @@ ref_path <- opt$options$ref_path
 print(paste0("reading gwas: ", key, " - chr: ", chr))
 
 ref_panel = fread(paste0(ref_path,"/",chr,".bim"))
+
 typed = fread(paste0("./z_scores/z_",key,"_",chr,".txt"))
 
 masked = fread(paste0("./z_scores_masked/z_scores_masked_z_",key,"_",chr,".txt"))
@@ -79,7 +82,10 @@ perf_table["L1_error"] = abs(perf_table$Z_typed-perf_table$Z_imputed)
 p = ggplot(perf_table, aes(x=  ordered(MAF_quantile, levels=c('0 % < MAF < 1 %', '1 % < MAF < 5 %','5 % < MAF < 10 %', '10 % < MAF < 50 %')), fill=R2_quantile, y=L1_error)) + geom_boxplot( outlier.shape = NA, notch=TRUE)
 p = p + ylim(c(0,0.75)) + coord_flip() + scale_fill_manual(values=c( "orange", "royalblue"))
 p = p + theme(legend.position="top") + xlab("")
-ggsave(paste0("./diag/L1_error_",key,".png"), width=6, height=6,plot=p)
+
+png( paste0("L1_error_",key,"-",chr,".png"), width=1000, height=1000)
+p
+dev.off()
 
 p = ggplot(perf_table, aes(x=  ordered(MAF_quantile, levels=c('0 % < MAF < 1 %', '1 % < MAF < 5 %','5 % < MAF < 10 %', '10 % < MAF < 50 %')), fill=R2_quantile, y=L1_error))+  geom_violin()
 p = p + ylim(c(0,0.75)) + coord_flip()
@@ -87,8 +93,9 @@ p = p + theme(legend.position="top") + xlab("")
 p + stat_summary(fun.data="mean_sdl", mult=1,
                  geom="crossbar", width=0.2 )
 
-ggsave(paste0("./diag/L1_error_",key,"violin.png"), width=6, height=6,plot=p)
-
+png( paste0("L1_error_",key,"-",chr,"_violin.png"), width=1000, height=1000)
+p
+dev.off()
 
 present_maf = intersect(c('0 % < MAF < 1 %', '1 % < MAF < 5 %','5 % < MAF < 10 %', '10 % < MAF < 50 %'),unique(perf_table$MAF_quantile))
 nbins = length(present_maf)
@@ -102,4 +109,6 @@ for(maf_b in present_maf){
   Cor_tab[maf_b, "cor"] = signif(ct$estimate, 2)
   Cor_tab[maf_b, "conf_interval"] = signif(ct$conf.int[2] - ct$estimate, 2)
 }
+
+
 write.table(Cor_tab, paste0("./diag/cor_",key,".txt"))
