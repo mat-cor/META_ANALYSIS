@@ -27,7 +27,7 @@ ref_panel = fread(paste0(ref_path,"/",chr,".bim"))
 
 typed = fread(paste0("./z_scores/z_",key,"_",chr,".txt"))
 
-masked = fread(paste0("./z_scores_masked/z_scores_masked_z_",key,"_",chr,".txt"))
+masked = fread(paste0("./z_scores_masked/z_",key,"_",chr,".txt"))
 
 imputed = fread(paste0("./z_scores_imputed_test/z_",key,"_",chr,"_0.0001.txt"))
 
