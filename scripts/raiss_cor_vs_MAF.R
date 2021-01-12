@@ -85,9 +85,7 @@ p = p + theme(legend.position="top") + xlab("")
 
 options(bitmapType='cairo')
 
-png( paste0("L1_error_",key,"_",chr,".png"), width=1000, height=1000)
-p
-dev.off()
+ggsave(paste0("L1_error_",key,"_",chr,".png"), width=6, height=6,plot=p)
 
 p = ggplot(perf_table, aes(x=  ordered(MAF_quantile, levels=c('0 % < MAF < 1 %', '1 % < MAF < 5 %','5 % < MAF < 10 %', '10 % < MAF < 50 %')), fill=R2_quantile, y=L1_error))+  geom_violin()
 p = p + ylim(c(0,0.75)) + coord_flip()
@@ -95,9 +93,8 @@ p = p + theme(legend.position="top") + xlab("")
 p + stat_summary(fun.data="mean_sdl", mult=1,
                  geom="crossbar", width=0.2 )
 
-png( paste0("L1_error_",key,"_",chr,"_violin.png"), width=1000, height=1000)
-p
-dev.off()
+ggsave(paste0("L1_error_",key,"_",chr,"violin.png"), width=6, height=6,plot=p)
+
 
 present_maf = intersect(c('0 % < MAF < 1 %', '1 % < MAF < 5 %','5 % < MAF < 10 %', '10 % < MAF < 50 %'),unique(perf_table$MAF_quantile))
 nbins = length(present_maf)
