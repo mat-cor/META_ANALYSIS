@@ -85,7 +85,7 @@ p = p + theme(legend.position="top") + xlab("")
 
 options(bitmapType='cairo')
 
-png( paste0("L1_error_",key,"-",chr,".png"), width=1000, height=1000)
+png( paste0("L1_error_",key,"_",chr,".png"), width=1000, height=1000)
 p
 dev.off()
 
@@ -95,7 +95,7 @@ p = p + theme(legend.position="top") + xlab("")
 p + stat_summary(fun.data="mean_sdl", mult=1,
                  geom="crossbar", width=0.2 )
 
-png( paste0("L1_error_",key,"-",chr,"_violin.png"), width=1000, height=1000)
+png( paste0("L1_error_",key,"_",chr,"_violin.png"), width=1000, height=1000)
 p
 dev.off()
 
@@ -114,4 +114,4 @@ for(maf_b in present_maf){
 }
 
 
-write.table(Cor_tab, paste0("cor_",key,".txt"))
+write.table(Cor_tab, paste0("cor_",key,"_",chr,".txt"))
