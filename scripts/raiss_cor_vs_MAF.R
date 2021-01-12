@@ -113,4 +113,4 @@ for(maf_b in present_maf){
 }
 
 
-write.table(Cor_tab, paste0("./diag/cor_",key,".txt"))
+write.table(Cor_tab, paste0("cor_",key,".txt"))
