@@ -3,15 +3,10 @@ FROM ubuntu:20.04
 ENV LC_ALL C.UTF-8
 ENV LANG C.UTF-8
 
-ADD META_ANALYSIS /META_ANALYSIS
+ADD ./ /META_ANALYSIS
 
 RUN apt-get update && \
     apt-get install -y git && \
-    apt-get install python3-pip --yes
-
-# need to upgrade pip to install jass deps
-RUN pip3 install --upgrade pip 
-
-RUN pip3 install -Iv git+https://gitlab.pasteur.fr/statistical-genetics/JASS_Pre-processing
-
-RUN pip3 install -Iv git+https://gitlab.pasteur.fr/statistical-genetics/raiss.git
+    apt-get install python3-pip --yes && \
+    pip3 install --upgrade pip && \
+    pip3 install -Iv git+https://gitlab.pasteur.fr/statistical-genetics/raiss.git
