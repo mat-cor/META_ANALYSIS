@@ -21,7 +21,7 @@ ref_path <- opt$options$ref_path
 
 print(paste0("reading gwas: ", key, " - chr: ", chr))
 
-ref_panel = fread(paste0(ref_path,chr,".bim"))
+ref_panel = fread(paste0(ref_path,"/",chr,".bim"))
 typed = fread(paste0("./z_scores/z_",key,"_",chr,".txt"))
 
 masked = fread(paste0("./z_scores_masked/z_scores_masked_z_",key,"_",chr,".txt"))
