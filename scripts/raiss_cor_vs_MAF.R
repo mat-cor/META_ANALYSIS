@@ -108,12 +108,9 @@ Cor_tab = data.frame(row.names=present_maf, cor=rep(0, nbins), conf_interval= re
 for(maf_b in present_maf){
   ct = cor.test(perf_table[which(perf_table$MAF_quantile == maf_b), "Z_typed" ], perf_table[which(perf_table$MAF_quantile == maf_b), "Z_imputed"])
   print(ct)
-  
-  print(ct$estimate)
-  print(ct$conf.int)
-  
+
   Cor_tab[maf_b, "cor"] = signif(ct$estimate, 2)
-  Cor_tab[maf_b, "conf_interval"] = signif(ct$conf.int[2] - ct$estimate, 2)
+  Cor_tab[maf_b, "p"] = signif(ct$p, 5)
 }
 
 
