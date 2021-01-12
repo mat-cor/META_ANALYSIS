@@ -83,6 +83,8 @@ p = ggplot(perf_table, aes(x=  ordered(MAF_quantile, levels=c('0 % < MAF < 1 %',
 p = p + ylim(c(0,0.75)) + coord_flip() + scale_fill_manual(values=c( "orange", "royalblue"))
 p = p + theme(legend.position="top") + xlab("")
 
+options(bitmapType='cairo')
+
 png( paste0("L1_error_",key,"-",chr,".png"), width=1000, height=1000)
 p
 dev.off()
