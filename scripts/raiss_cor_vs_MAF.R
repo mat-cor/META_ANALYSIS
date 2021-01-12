@@ -93,7 +93,7 @@ p = p + theme(legend.position="top") + xlab("")
 p + stat_summary(fun.data="mean_sdl", mult=1,
                  geom="crossbar", width=0.2 )
 
-ggsave(paste0("L1_error_",key,"_",chr,"violin.png"), width=6, height=6,plot=p)
+ggsave(paste0("L1_error_",key,"_",chr,"_violin.png"), width=6, height=6,plot=p)
 
 
 present_maf = intersect(c('0 % < MAF < 1 %', '1 % < MAF < 5 %','5 % < MAF < 10 %', '10 % < MAF < 50 %'),unique(perf_table$MAF_quantile))
