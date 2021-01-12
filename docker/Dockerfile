@@ -3,7 +3,7 @@ FROM ubuntu:20.04
 ENV LC_ALL C.UTF-8
 ENV LANG C.UTF-8
 
-ADD META_ANALYSIS /META_ANALYSIS
+ADD ./ /META_ANALYSIS
 
 ENV TZ=Europe/Helsinki
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
@@ -30,12 +30,10 @@ RUN apt-get update && \
     apt-get install python3-pip --yes
 
 # need to upgrade pip to install jass deps
-RUN pip3 install --upgrade pip 
-
-RUN pip3 install -lv git+https://gitlab.pasteur.fr/statistical-genetics/JASS_Pre-processing
-
-RUN pip3 install -lv git+https://gitlab.pasteur.fr/statistical-genetics/raiss.git
+RUN pip3 install --upgrade pip && \
+    pip3 install -Iv git+https://gitlab.pasteur.fr/statistical-genetics/raiss
 
 ADD META_ANALYSIS/scripts/install_packs.R /usr/local/bin/
+
 RUN chmod a+x /usr/local/bin/install_packs.R && \
     install_packs.R
