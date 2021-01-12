@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 
-packs <- c("optparse","data.table","R.utils","dplyr")
+packs <- c("optparse","data.table","R.utils","dplyr","ggplot2")
 
 for (p in packs) {
   if( !require(p, character.only = T)) {
