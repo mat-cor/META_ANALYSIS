@@ -39,7 +39,7 @@ ori <- ori %>%
   mutate(Z = BETA/SE,
          rsID = paste0(CHR, ':', POS, ':', Allele1, ':', Allele2),
          raiss.imputed = 0) %>%
-  select(rsID, '#CHR' = CHR, POS, Allele1, Allele2, Z, p.value, raiss.imputed, BETA, SE, AF_Allele2, imputationInfo, N)
+  select(rsID, '#CHR' = CHR, POS, Allele1, Allele2, Z, p.value, raiss.imputed, N, imputationInfo, BETA, SE, AF_Allele2)
 
 head(ori)
 
@@ -51,7 +51,7 @@ imp <- imp %>%
          p.value = 2*pnorm(-abs(Z)),
          raiss.imputed = 1,
          N = n) %>%
-  select(rsID, '#CHR', POS = pos, Allele1 = A0, Allele2 = A1, Z, p.value, raiss.imputed, imputationInfo = imputation_R2, ld_score, N)
+  select(rsID, '#CHR', POS = pos, Allele1 = A0, Allele2 = A1, Z, p.value, raiss.imputed, N, imputationInfo = imputation_R2, ld_score)
 
 head(imp)
 
@@ -60,4 +60,4 @@ out <- out %>%
   arrange(`#CHR`, POS)
 
 oo <- opt$options$out
-fwrite(out, oo, sep = '\t')
+fwrite(out, oo, sep = '\t', na = "NA")
