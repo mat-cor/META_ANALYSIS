@@ -1,0 +1,3 @@
+FROM gcr.io/covid-19-hg/sumstats-imp:0.4.1
+
+ADD ./ /META_ANALYSIS

@@ -33,7 +33,7 @@ RUN apt-get update && \
 RUN pip3 install --upgrade pip && \
     pip3 install -Iv git+https://gitlab.pasteur.fr/statistical-genetics/raiss
 
-ADD META_ANALYSIS/scripts/install_packs.R /usr/local/bin/
+ADD ./scripts/install_packs.R /usr/local/bin/
 
 RUN chmod a+x /usr/local/bin/install_packs.R && \
     install_packs.R
