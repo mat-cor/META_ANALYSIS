@@ -43,12 +43,15 @@ ori <- ori %>%
 
 head(ori)
 
+n <- ori$N[1]
+
 imp <- imp %>%
   filter(!rsID %in% ori$rsID) %>%
   mutate('#CHR' = as.integer(sub(":.*", "", rsID)),
          p.value = 2*pnorm(-abs(Z)),
-         raiss.imputed = 1) %>%
-  select(rsID, '#CHR', POS = pos, Allele1 = A0, Allele2 = A1, Z, p.value, raiss.imputed, Var, ld_score)
+         raiss.imputed = 1,
+         N = n) %>%
+  select(rsID, '#CHR', POS = pos, Allele1 = A0, Allele2 = A1, Z, p.value, raiss.imputed, imputationInfo = imputation_R2, ld_score, N)
 
 head(imp)
 
