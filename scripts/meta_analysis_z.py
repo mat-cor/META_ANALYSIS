@@ -130,17 +130,18 @@ def comb_meta( studies : List[Tuple['Study','VariantData']], is_het_test = False
 
     if no_imp:
         res_z_no_imp = z_ivw_meta(no_imp)
-        eff_size_no_imp = ((4 * cases_no_imp * controls_no_imp) / (cases_no_imp + controls_no_imp))
+        effective_size_no_imp = ((4 * cases_no_imp * controls_no_imp) / (cases_no_imp + controls_no_imp))
     if imp:
         res_z_imp = z_neff_meta(imp)
-        eff_size_imp = ((4 * cases_imp * controls_imp) / (cases_imp + controls_imp))
+        effective_size_imp = ((4 * cases_imp * controls_imp) / (cases_imp + controls_imp))
 
     if len(no_imp) == len(studies):
         z_meta = res_z_no_imp[0]
     elif len(imp) == len(studies):
         z_meta = res_z_imp[0]
     else:
-        z_meta = (res_z_no_imp[0] * eff_size_no_imp + res_z_imp[0] * eff_size_imp) / (math.sqrt(eff_size_no_imp + eff_size_imp))
+        z_meta = (res_z_no_imp[0] * math.sqrt(effective_size_no_imp) + res_z_imp[0] * math.sqrt(effective_size_imp)) / \
+                 (math.sqrt(effective_size_no_imp + effective_size_imp))
 
     return (z_meta, None, max(sys.float_info.min * sys.float_info.epsilon, 2 * scipy.stats.norm.sf(abs(z_meta))), None)
 
