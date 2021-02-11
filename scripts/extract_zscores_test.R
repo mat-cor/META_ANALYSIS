@@ -36,7 +36,7 @@ setkey(ref_panel, 'rsID')
 setkey(typed, 'rsID')
 
 # add MAF to typed SNPs
-typed$MAF = ref_panel[masked_SNP, MAF]
+typed$MAF = ref_panel[typed, MAF]
 
 # calculate actual MAF
 get_maf <- function(x){min(x['MAF'], 1-x['MAF'])}
