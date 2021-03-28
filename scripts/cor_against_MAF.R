@@ -91,7 +91,7 @@ perf_table["L1_error"] = abs(perf_table$Z_typed-perf_table$Z_imputed)
 p = ggplot(perf_table, aes(x=  ordered(MAF_quantile, levels=c('0 % < MAF < 1 %', '1 % < MAF < 5 %','5 % < MAF < 10 %', '10 % < MAF < 50 %')), fill=R2_quantile, y=L1_error)) + geom_boxplot( outlier.shape = NA, notch=TRUE)
 p = p + ylim(c(0,0.75)) + coord_flip() + scale_fill_manual(values=c( "orange", "royalblue"))
 p = p + theme(legend.position="top") + xlab("")
-ggsave(paste0("./diag/L1_error_",key,".png"), width=6, height=6,plot=p)
+ggsave(paste0("L1_error_",key,".png"), width=6, height=6,plot=p)
 
 p = ggplot(perf_table, aes(x=  ordered(MAF_quantile, levels=c('0 % < MAF < 1 %', '1 % < MAF < 5 %','5 % < MAF < 10 %', '10 % < MAF < 50 %')), fill=R2_quantile, y=L1_error))+  geom_violin()
 p = p + ylim(c(0,0.75)) + coord_flip()
@@ -99,7 +99,7 @@ p = p + theme(legend.position="top") + xlab("")
 p + stat_summary(fun.data="mean_sdl", mult=1,
              geom="crossbar", width=0.2 )
 
-ggsave(paste0("./diag/L1_error_",key,"violin.png"), width=6, height=6,plot=p)
+ggsave(paste0("L1_error_",key,"violin.png"), width=6, height=6,plot=p)
 
 
 present_maf = intersect(c('0 % < MAF < 1 %', '1 % < MAF < 5 %','5 % < MAF < 10 %', '10 % < MAF < 50 %'),unique(perf_table$MAF_quantile))
