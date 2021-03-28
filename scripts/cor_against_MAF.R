@@ -12,16 +12,16 @@ option_list = list(
               help="path to imputed scores", metavar="character"),
   make_option(c("-t", "--typed_path"), type="character", default=NULL,
               help="path to typed scores", metavar="character"),
-  make_option(c("-t", "--masked_path"), type="character", default=NULL,
+  make_option(c("-m", "--masked_path"), type="character", default=NULL,
               help="path to masked scores", metavar="character"),
   make_option(c("-c", "--chr"), type="character", default=NULL,
               help="chromosome", metavar="character"),
   make_option(c("-r", "--ref_path"), type="character", default=NULL,
               help="ref panel path", metavar="character")
-);
+)
 
-opt_parser = OptionParser(option_list=option_list);
-opt = parse_args(opt_parser, positional_arguments=0);
+opt_parser = OptionParser(option_list=option_list)
+opt = parse_args(opt_parser, positional_arguments=0)
 
 key <- opt$options$gwas_code
 chr <- opt$options$chr
