@@ -115,4 +115,4 @@ Cor_tab[maf_b, "cor"] = signif(ct$estimate, 2)
 Cor_tab[maf_b, "conf_interval"] = signif(ct$conf.int[2] - ct$estimate, 2)
 }
 
-write.table(Cor_tab, paste0("./cor_",key,".txt"))
+write.table(Cor_tab, paste0("cor_",key,".txt"))
