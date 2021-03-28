@@ -13,8 +13,8 @@ option_list = list(
               help="chromosome", metavar="character"),
   make_option(c("-r", "--ref_path"), type="character", default=NULL,
               help="ref panel path", metavar="character"),
-  make_option(c("-n", "--n_snps"), type="character", default=NULL,
-              help="n snps to extract", metavar="character")
+  make_option(c("-n", "--n_snps"), type="integer", default=NULL,
+              help="n snps to extract", metavar="integer")
 );
 
 opt_parser = OptionParser(option_list=option_list);
@@ -38,9 +38,10 @@ setkey(typed, 'rsID')
 # add MAF to typed SNPs
 typed$MAF = ref_panel[typed, MAF]
 
-# calculate actual MAF
-get_maf <- function(x){min(x['MAF'], 1-x['MAF'])}
-typed$MAF_minor <- apply(typed, 1, get_maf)
+# compute actual MAF
+typed <- typed %>%
+  mutate(MAF_minor = case_when(MAF > 0.5 ~ 1-MAF,
+                               TRUE ~ MAF))
 
 Q_MAF = c(0, 0.01, 0.05, 0.1, 0.5, 1)
 
@@ -48,9 +49,16 @@ typed$MAF_bin <- cut(typed$MAF_minor, Q_MAF, labels = F)
 
 n_per_bin <- n / (length(Q_MAF)-1 )
 
+head(typed)
+table(typed$MAF_bin)
+
 sampled <- typed %>% 
   group_by(MAF_bin) %>% 
-  sample_n(n_per_bin) %>%
+  slice_sample(n=n_per_bin) %>%
   select(rsID, pos, A0, A1, Z, P)
 
-fwrite(sampled, paste0("z_scores/z_",key,"_",chr,"_sampled.txt"), quote = F, sep = '\t')
+not_sampled <- typed %>%
+  filter(!rsID %in% sampled$rsID)
+
+fwrite(sampled, paste0("z_scores_sampled/z_",key,"_",chr,".txt"), quote = F, sep = '\t')
+fwrite(not_sampled, paste0("z_scores_not_sampled/z_",key,"_",chr,".txt"), quote = F, sep = '\t')
