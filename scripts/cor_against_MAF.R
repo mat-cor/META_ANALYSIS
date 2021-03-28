@@ -30,6 +30,8 @@ typed_path <- opt$options$typed_path
 imputed_path <- opt$options$imputed_path
 masked_path <- opt$options$masked_path
 
+options(bitmapType='cairo')
+
 print(paste0("reading gwas: ", key, " - chr: ", chr))
 
 ref_panel = fread(paste0(ref_path,"/",chr,".bim"))
