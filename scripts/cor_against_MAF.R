@@ -101,7 +101,7 @@ p = p + theme(legend.position="top") + xlab("")
 p + stat_summary(fun.data="mean_sdl", mult=1,
              geom="crossbar", width=0.2 )
 
-ggsave(paste0("L1_error_",key,"violin.png"), width=6, height=6,plot=p)
+ggsave(paste0("L1_error_",key,"_violin.png"), width=6, height=6,plot=p)
 
 
 present_maf = intersect(c('0 % < MAF < 1 %', '1 % < MAF < 5 %','5 % < MAF < 10 %', '10 % < MAF < 50 %'),unique(perf_table$MAF_quantile))
@@ -111,10 +111,10 @@ print(present_maf)
 Cor_tab = data.frame(row.names=present_maf, cor=rep(0, nbins), conf_interval= rep(0, nbins))
 
 for(maf_b in present_maf){
-ct = cor.test(perf_table[which(perf_table$MAF_quantile == maf_b), "Z_typed" ], perf_table[which(perf_table$MAF_quantile == maf_b), "Z_imputed"])
-
-Cor_tab[maf_b, "cor"] = signif(ct$estimate, 2)
-Cor_tab[maf_b, "conf_interval"] = signif(ct$conf.int[2] - ct$estimate, 2)
+  ct = cor.test(perf_table[which(perf_table$MAF_quantile == maf_b), "Z_typed" ], perf_table[which(perf_table$MAF_quantile == maf_b), "Z_imputed"])
+  
+  Cor_tab[maf_b, "cor"] = signif(ct$estimate, 2)
+  Cor_tab[maf_b, "conf_interval"] = signif(ct$conf.int[2] - ct$estimate, 2)
 }
 
 write.table(Cor_tab, paste0("cor_",key,".txt"))
